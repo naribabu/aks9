@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ReplicationController
+metadata: 
+  name: tomcat-rc
+  namespace: nari-space
+  labels:
+    app: appserver
+spec:
+  template:
+    metadata:
+      name: tomcat-pod
+      labels: 
+        app: appserver
+    spec:  
+      containers:
+        - name: tomcat
+          image: tomee
+...
+
