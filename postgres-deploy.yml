@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: postgres-deployment
+  labels:
+    type: db
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      type: db
+  template:
+    metadata:
+      name: postgres-pod
+      labels:
+        type: db
+    spec:
+      containers:
+        - name: mypostgres
+          image: postgres
+          env:
+            - name: POSTGRES_USER
+              value: anri
+            - name: POSTGRES_PASSWORD
+              value: nari9
+            - name: POSTGRES_DB
+              value: mydb
+...
