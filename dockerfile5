@@ -1,0 +1,5 @@
+FROM ubuntu
+MAINTAINER narihome
+
+USER root
+VOLUME /narivol

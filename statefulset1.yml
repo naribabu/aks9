@@ -1,0 +1,49 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  labels:
+    app: nginx
+spec:
+  clusterIP: None
+  ports: 
+    - protocol: TCP
+      name: tcp
+      port: 80
+  selector: 
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: nginx-statefulset
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  serviceName: nginx-service
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata: 
+      name: nginx-pod
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: mynginx
+          image: nginx
+          ports: 
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: nginx-volume
+          persistentVolumeClaim:
+            claimName: my-pvc
+...
+  
+

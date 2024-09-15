@@ -1,0 +1,53 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  clusterIP: None
+  ports: 
+    - protocol: TCP
+      name: tcp
+      port: 80
+  selector: 
+    app: nginx
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: nginx-statefulset
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  serviceName: nginx
+  template:
+    metadata: 
+      name: nginx-pod
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: mynginx
+          image: nginx
+          ports: 
+            - containerPort: 80
+          volumeMounts:
+            - name: new-volume
+              mountPath: /usr/share/nginx/html
+ volumeClaimTemplates:
+   - metadata:
+      name: new-volume
+     spec: 
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 200Mi
+...
+  
+
