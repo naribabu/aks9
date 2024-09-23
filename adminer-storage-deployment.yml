@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: adminer
+spec: 
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: adminer
+  template:
+    metadata:
+      name: adminer-pod
+      labels:
+        app: adminer
+    spec:
+      containers:
+        - name: myadminer
+          image: adminer
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ADMINER_DEFAULT_SERVER
+              value: mysql
+            - name: ADMINER_DEFAULT_USER
+              value: nari
+            - name: ADMINER_DEFAULT_PASSWORD
+              value: nari
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: adminer
+spec:
+  selector:
+    app: adminer
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+...
+
